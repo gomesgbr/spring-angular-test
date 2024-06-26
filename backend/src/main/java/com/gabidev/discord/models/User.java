@@ -2,6 +2,7 @@ package com.gabidev.discord.models;
 
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.UUID;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
@@ -19,8 +20,9 @@ public class User implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "id", updatable = false, unique = true, nullable = false)
+    private UUID id;
 
     @Column(nullable = false, length = 250)
     private String nome;
@@ -43,7 +45,7 @@ public class User implements Serializable {
     public User() {
     }
 
-    public User(Integer id, String nome, String username, String email, String passwd, LocalDate dataNasc) {
+    public User(UUID id, String nome, String username, String email, String passwd, LocalDate dataNasc) {
         this.id = id;
         this.nome = nome;
         this.username = username;
@@ -52,7 +54,7 @@ public class User implements Serializable {
         this.dataNasc = dataNasc;
     }
 
-    public Integer getId() {
+    public UUID getId() {
         return id;
     }
 
@@ -95,4 +97,31 @@ public class User implements Serializable {
     public void setDataNasc(LocalDate dataNasc) {
         this.dataNasc = dataNasc;
     }
+
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((id == null) ? 0 : id.hashCode());
+        return result;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        User other = (User) obj;
+        if (id == null) {
+            if (other.id != null)
+                return false;
+        } else if (!id.equals(other.id))
+            return false;
+        return true;
+    }
+
+    
 }
